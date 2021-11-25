@@ -76,7 +76,6 @@ function List(props) {
     },
   ];
   const [list, setList] = useState([])
-  console.log('进入list');
   useEffect(() => {
     findeList().then((resdata) => {
       setList(resdata.lists);

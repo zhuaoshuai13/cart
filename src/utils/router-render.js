@@ -1,5 +1,5 @@
 import React from 'react'
-import {Switch, Route} from 'react-router-dom'
+import {Switch, Route, Redirect} from 'react-router-dom'
 
 const routerRender = (routes) => (
   <Switch>
@@ -11,6 +11,7 @@ const routerRender = (routes) => (
           key={route.path} />
       ))
     }
+    <Redirect to="/list"></Redirect>
   </Switch>
 )
 

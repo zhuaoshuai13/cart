@@ -1,6 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { Table, Tag, Space, Button, notification } from 'antd';
+import { Table, Tag, Space, Button, notification, InputNumber } from 'antd';
 const mapStateToProps = (state) => (
   {
     cart: state.cart,
@@ -9,6 +9,9 @@ const mapStateToProps = (state) => (
 const mapDispatchToProps = null;
 const hoc = connect(mapStateToProps, mapDispatchToProps)
 function Cart(props) {
+  {/* eslint-disable-next-line react/prop-types */}
+  console.log(props.cart);
+  const changeNum = (e) => {console.log(e);}
   const columns = [
     {
       title: '商品名称',
@@ -26,24 +29,30 @@ function Cart(props) {
       key: 'key',
     },
     {
-      title: 'Tags',
+      title: '数量',
       key: 'key',
-      dataIndex: 'tag',
-      render: (tag) => (
-        <>
-          {tag.map((tag) => {
-            let color = tag.length > 5 ? 'geekblue' : 'green';
-            if (tag === 'loser') {
-              color = 'volcano';
-            }
-            return (
-              <Tag color={color} key={tag}>
-                {tag.toUpperCase()}
-              </Tag>
-            );
-          })}
-        </>
+      dataIndex: 'key',
+      render: (dataIndex) => (
+        <Space size="middle">
+          {/* eslint-disable-next-line react/prop-types */}
+          <InputNumber id={dataIndex} min={1} max={10} defaultValue={1} onStep={(e) => {changeNum(e)}}
+            onBlur={(Event) => {console.log(Event.currentTarget)}}
+          />
+          {/* <Button
+              type="primary"
+              onClick={() => {
+                console.log('aaa');
+              }}
+
+            >
+            </Button> */}
+        </Space>
       ),
+    },
+    {
+      title: '小计',
+      dataIndex: 'price',
+      key: 'key',
     },
     {
       title: '操作',
@@ -59,7 +68,7 @@ function Cart(props) {
   ];
   return (
   // eslint-disable-next-line react/prop-types
-    <Table columns={columns}  dataSource={props.cart}/>
+    <Table columns={columns}  dataSource={props.cart} pagination={false} footer={(data) => ('合计')}/>
   )
 }
 
