@@ -15,6 +15,7 @@ function List(props) {
     console.log(e.currentTarget.id);
     const adds = list.find((item) => item.key === parseInt(e.currentTarget.id))
     console.log(adds);
+    adds.checked = false;
     // eslint-disable-next-line react/prop-types
     props.add(adds)
 

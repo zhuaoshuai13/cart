@@ -1,13 +1,14 @@
 import React, {useEffect, useState} from 'react'
 import { connect } from 'react-redux'
-import { Table, Tag, Space, Button, notification, InputNumber } from 'antd';
-import {cNum} from '../../actions/cartlist'
+import { Table, Tag, Space, Button, notification, InputNumber, Typography } from 'antd';
+import {cNum, cTotal} from '../../actions/cartlist'
 
 function Cart(props) {
   {/* eslint-disable-next-line react/prop-types */}
   const [carts, setCarts] = useState(props.cart)
-  console.log(carts);
   const changeNum = (e) => {
+    console.log(e.currentTarget);
+    console.log('调用add');
     {/* eslint-disable-next-line react/prop-types */}
     props.add({
       key: e.currentTarget.id,
@@ -33,11 +34,11 @@ function Cart(props) {
     {
       title: '数量',
       key: 'key',
-      dataIndex: 'key',
-      render: (dataIndex) => (
+      dataIndex: 'num',
+      render: (dataindex, key) => (
         <Space size="middle">
           {/* eslint-disable-next-line react/prop-types */}
-          <InputNumber id={dataIndex} min={1} max={10} defaultValue={1}
+          <InputNumber id={key.key} min={1} defaultValue={key.num}
             onBlur={(e) => {changeNum(e)}}
           />
         </Space>
@@ -45,7 +46,7 @@ function Cart(props) {
     },
     {
       title: '小计',
-      dataIndex: 'price',
+      dataIndex: 'total',
       key: 'key',
     },
     {
@@ -60,8 +61,50 @@ function Cart(props) {
       ),
     },
   ];
+  // let checked
+  let [getChecked, setGetChecked] = useState([])
+  const [selectedRowKeys, setSelectedRowKeys] = useState([])
+  const onSelectedChange = (selectedRowKeys, e) => {
+    console.log(selectedRowKeys);
+    setSelectedRowKeys(selectedRowKeys);
+    // eslint-disable-next-line react/prop-types
+    props.total({
+      payload: e,
+    })
+  }
+  const rowSelection = {
+    selectedRowKeys,
+    onChange: onSelectedChange,
+  }
+  const { Text } = Typography;
   return (
-    <Table columns={columns}  dataSource={carts} pagination={false} footer={(data) => ('合计')}/>
+    <Table
+      rowSelection={rowSelection}
+      columns={columns}
+      dataSource={carts}
+      pagination={false}
+      summary={(lists) => {
+        console.log(lists);
+        let totalBorrow = 0;
+        console.log(getChecked);
+        totalBorrow = lists.reduce((acc, item) => {
+          if (item.checked) {
+            acc += item.total
+          }
+          return acc
+        }, 0)
+
+        return (
+          <>
+            <Table.Summary.Row>
+              <Table.Summary.Cell>合计</Table.Summary.Cell>
+              <Table.Summary.Cell>
+                <Text type="danger">{totalBorrow}</Text>
+              </Table.Summary.Cell>
+            </Table.Summary.Row>
+          </>
+        );
+      }}/>
   )
 }
 const mapStateToProps = (state) => (
@@ -70,6 +113,6 @@ const mapStateToProps = (state) => (
   }
 )
 
-const mapDispatchToProps = (dispatch) => ({add: (adds) => dispatch(cNum(adds))})
+const mapDispatchToProps = (dispatch) => ({add: (adds) => dispatch(cNum(adds)), total: (lists) => dispatch(cTotal(lists))})
 const hoc = connect(mapStateToProps, mapDispatchToProps)
 export default hoc(Cart)
