@@ -1,17 +1,19 @@
-import React from 'react'
+import React, {useEffect, useState} from 'react'
 import { connect } from 'react-redux'
 import { Table, Tag, Space, Button, notification, InputNumber } from 'antd';
-const mapStateToProps = (state) => (
-  {
-    cart: state.cart,
-  }
-)
-const mapDispatchToProps = null;
-const hoc = connect(mapStateToProps, mapDispatchToProps)
+import {cNum} from '../../actions/cartlist'
+
 function Cart(props) {
   {/* eslint-disable-next-line react/prop-types */}
-  console.log(props.cart);
-  const changeNum = (e) => {console.log(e);}
+  const [carts, setCarts] = useState(props.cart)
+  console.log(carts);
+  const changeNum = (e) => {
+    {/* eslint-disable-next-line react/prop-types */}
+    props.add({
+      key: e.currentTarget.id,
+      num: e.currentTarget.value,
+    })
+  }
   const columns = [
     {
       title: '商品名称',
@@ -35,17 +37,9 @@ function Cart(props) {
       render: (dataIndex) => (
         <Space size="middle">
           {/* eslint-disable-next-line react/prop-types */}
-          <InputNumber id={dataIndex} min={1} max={10} defaultValue={1} onStep={(e) => {changeNum(e)}}
-            onBlur={(Event) => {console.log(Event.currentTarget)}}
+          <InputNumber id={dataIndex} min={1} max={10} defaultValue={1}
+            onBlur={(e) => {changeNum(e)}}
           />
-          {/* <Button
-              type="primary"
-              onClick={() => {
-                console.log('aaa');
-              }}
-
-            >
-            </Button> */}
         </Space>
       ),
     },
@@ -67,9 +61,15 @@ function Cart(props) {
     },
   ];
   return (
-  // eslint-disable-next-line react/prop-types
-    <Table columns={columns}  dataSource={props.cart} pagination={false} footer={(data) => ('合计')}/>
+    <Table columns={columns}  dataSource={carts} pagination={false} footer={(data) => ('合计')}/>
   )
 }
+const mapStateToProps = (state) => (
+  {
+    cart: state.cart,
+  }
+)
 
+const mapDispatchToProps = (dispatch) => ({add: (adds) => dispatch(cNum(adds))})
+const hoc = connect(mapStateToProps, mapDispatchToProps)
 export default hoc(Cart)
