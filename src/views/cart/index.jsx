@@ -1,18 +1,32 @@
 import React, {useEffect, useState} from 'react'
 import { connect } from 'react-redux'
 import { Table, Tag, Space, Button, notification, InputNumber, Typography } from 'antd';
-import {cNum, cTotal} from '../../actions/cartlist'
+import {cNum, cTotal, del} from '../../actions/cartlist'
 
 function Cart(props) {
+  // componentWillMount(); {
+  //   console.log('组件即将渲染');
+  // }
+  useEffect((e) => {console.log('cart渲染', e);})
+  useEffect(() => (e) => {console.log('cart销毁', e);})
   {/* eslint-disable-next-line react/prop-types */}
   const [carts, setCarts] = useState(props.cart)
+  useEffect(() => {
+    // eslint-disable-next-line react/prop-types
+    setCarts(props.cart)
+  // eslint-disable-next-line react/prop-types
+  }, props.cart)
   const changeNum = (e) => {
-    console.log(e.currentTarget);
-    console.log('调用add');
     {/* eslint-disable-next-line react/prop-types */}
     props.add({
       key: e.currentTarget.id,
       num: e.currentTarget.value,
+    })
+  }
+  const del = (e) => {
+    // eslint-disable-next-line react/prop-types
+    props.del({
+      key: e.currentTarget.id,
     })
   }
   const columns = [
@@ -56,37 +70,37 @@ function Cart(props) {
       render: (key, record) => (
         <Space size="middle">
           {/* eslint-disable-next-line react/prop-types */}
-          <Button type="primary" id={key} >删除</Button>
+          <Button type="primary" id={key} onClick={del}>删除</Button>
         </Space>
       ),
     },
   ];
   // let checked
-  let [getChecked, setGetChecked] = useState([])
   const [selectedRowKeys, setSelectedRowKeys] = useState([])
   const onSelectedChange = (selectedRowKeys, e) => {
-    console.log(selectedRowKeys);
     setSelectedRowKeys(selectedRowKeys);
     // eslint-disable-next-line react/prop-types
     props.total({
       payload: e,
     })
   }
+  const getCheckboxProps = (e) => {
+    console.log(e);
+  }
   const rowSelection = {
     selectedRowKeys,
-    onChange: onSelectedChange,
+    onChange: onSelectedChange, getCheckboxProps,
   }
   const { Text } = Typography;
   return (
     <Table
       rowSelection={rowSelection}
       columns={columns}
+      // eslint-disable-next-line react/prop-types
       dataSource={carts}
       pagination={false}
       summary={(lists) => {
-        console.log(lists);
         let totalBorrow = 0;
-        console.log(getChecked);
         totalBorrow = lists.reduce((acc, item) => {
           if (item.checked) {
             acc += item.total
@@ -113,6 +127,10 @@ const mapStateToProps = (state) => (
   }
 )
 
-const mapDispatchToProps = (dispatch) => ({add: (adds) => dispatch(cNum(adds)), total: (lists) => dispatch(cTotal(lists))})
+const mapDispatchToProps = (dispatch) => ({
+  add: (adds) => dispatch(cNum(adds)),
+  total: (lists) => dispatch(cTotal(lists)),
+  del: (key) => dispatch(del(key)),
+})
 const hoc = connect(mapStateToProps, mapDispatchToProps)
 export default hoc(Cart)

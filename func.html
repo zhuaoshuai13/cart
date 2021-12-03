@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <script>
+// func3 = (...funcs) => val => funcs.reduce((a, b) => func2(func1), val)
+     
+// const func1 = a => a*2
+// const func2 = a => a*2
+// const func3  = funcAll(fun1,func2)
+// func3(3)
+
+// const pipeline = (...funcs) =>{
+//   return  (val) => {
+//     funcs.reduce((a, b) =>{
+//       return b(a)
+//     },val);
+//   }
+// }
+
+// const plus1 = a => a + 1;
+// const mult2 = a => a * 2;
+// const addThenMult = pipeline(plus1, mult2);
+
+const mid = (...funcs) => val => funcs.reduce((acc,func) => func(acc),val)
+  
+const mid = (...funcs) => val => funcs.reduce((acc,func) => func(acc), val)
+
+const func3 = mid(fun1, fun2);
+
+const fun1 = a => a + 1
+const fun2 = a => a * 2
+
+</script>
+</body>
+</html>

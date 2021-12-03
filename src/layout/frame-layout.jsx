@@ -1,30 +1,30 @@
 import { Layout, Menu, Breadcrumb } from 'antd';
 import React, { useState, useCallback } from 'react'
+import {useHistory} from 'react-router-dom'
 import {
   ShoppingCartOutlined,
   BarsOutlined,
 } from '@ant-design/icons';
 import './style.less';
-import { useHistory } from 'react-router-dom';
 const { Header, Content, Footer, Sider } = Layout;
 const { SubMenu } = Menu;
 import renderRouter from '../utils/router-render'
 import route from '../routers'
 function FrameLayout() {
+  const history = useHistory()
   // 侧边菜单折叠
   const [collapsed, setCollapsed] = useState(false);
-  const history = useHistory()
   const onCollapse = useCallback((collapsed) => setCollapsed(collapsed), []);
   const handleNav = useCallback(({key}) => {
     history.push(key)
   }, [])
   return (
     <Layout style={{ minHeight: '100vh'}} className='frame-layout'>
-      <Sider collapsible collapsed={collapsed} onCollapse={onCollapse}>
+      <Sider collapsible collapsed={collapsed} onCollapse={onCollapse} >
         <div className="logo" >销售系统</div>
         <Menu
           theme="dark"
-          defaultSelectedKeys={['1']}
+          defaultSelectedKeys={history.location.pathname}
           mode="inline"
           onClick={handleNav}
         >
@@ -45,7 +45,7 @@ function FrameLayout() {
             {renderRouter(route)}
           </div>
         </Content>
-        <Footer style={{ textAlign: 'center' }}>Ant Design ©2018 Created by Ant UED</Footer>
+        <Footer style={{ textAlign: 'center' }}>胖玻璃球责任有限公司</Footer>
       </Layout>
     </Layout>
   );

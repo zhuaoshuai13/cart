@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <script>
+    let board = [["A","B","C","E"],["S","F","C","S"],["A","D","E","E"]]
+    let word = "ABCCED"
+    board = board.flat()
+    word = word.split('')
+    console.log(board);
+    console.log(word); 
+  for(let i = 0; i < word.length; i++) {
+    console.log(word[i]);
+    if(board.indexOf(word[i])!==-1){
+      
+      console.log(board.indexOf(word[i]));
+       board.splice(board.indexOf(word[i]),1)
+       console.log(board);
+    }else{
+     console.log(false);
+    }
+  }
+ console.log(true);
+  </script>
+</body>
+</html>

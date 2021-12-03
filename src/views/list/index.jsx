@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Table, Tag, Space, Button, notification } from 'antd';
+import { Table, Tag, Space, Button, notification, Pagination } from 'antd';
 import { SmileOutlined } from '@ant-design/icons';
 import { findeList } from '../../api/list';
 import { connect } from 'react-redux'
@@ -27,6 +27,10 @@ function List(props) {
       });
     };
     openNotification()
+  }
+  const PaginationProps = {
+    total: 10,
+    pageSize: 5,
   }
   const columns = [
     {
@@ -85,7 +89,7 @@ function List(props) {
 
   return (
     <div>
-      <Table columns={columns} dataSource={list} />;
+      <Table columns={columns} dataSource={list}  pagination={PaginationProps}/>
     </div>
   )
 }

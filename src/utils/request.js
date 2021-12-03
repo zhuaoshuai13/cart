@@ -13,15 +13,11 @@ service.interceptors.request.use((config) => {
 service.interceptors.response.use((response) => {
   if (response.status >= 200 && response.status < 300) {
     return response.data
-    // const resData = response.data
-    // if (resData.code === 200) {
-    //   return resData.data
-    // }
+  } else {
+    const error = new Error('接口访问异常')
+    error.error = response
+    return Promise.reject(error)
   }
-  // const error = new Error('接口访问异常')
-  // error.error = response
-  // return Promise.reject(error)
-  // console.log(response.status);
 })
 
 export default service

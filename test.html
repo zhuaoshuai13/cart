@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+    
+  </style>
+</head>
+  <ul class="check">
+    <li><input type="checkbox" id="sex"><span>性别为男</span></li>
+    <li><input type="checkbox" id="age"><span>年龄大于18</span></li>
+    <li><input type="checkbox" id="isShare"><span>需要转发</span></li>
+  </ul>
+  <h2>列表</h2>
+  <ul class="contain">
+
+  </ul>
+<body>
+  <script>
+    //全部条件
+    const allConditions = {
+      sex:'male', 
+      age:18,
+      isShare: true,
+    }
+
+    //总的数据
+    const allLists = [
+      {
+        sex: 'male',
+        age: 36,
+        isShare: true,
+      },{
+        sex: 'famale',
+        age: 19,
+        isShare: true,
+      },{
+        sex: 'male',
+        age: 10,
+        isShare: false,
+      },{
+        sex: 'famale',
+        age: 7,
+        isShare: true,
+      },{
+        sex: 'male',
+        age: 20,
+        isShare: false,
+      },{
+        sex: 'male',
+        age: 16,
+        isShare: true,
+      },{
+        sex: 'male',
+        age: 16,
+        isShare: false,
+      },{
+        sex: 'male',
+        age: 27,
+        isShare: true,
+      },{
+        sex: 'male',
+        age: 36,
+        isShare: true,
+      },{
+        sex: 'female',
+        age: 21,
+        isShare: false,
+      },{
+        sex: 'male',
+        age: 36,
+        isShare: true,
+      },
+    ]
+
+    //渲染页面
+    function render(newList = allLists) {
+      const listHtml = newList.map((item) =>{
+      return `<li>性别: ${item.sex},  年龄: ${item.age}  是否转发:${item.isShare}</li>`
+    }).join('') 
+    document.querySelector('.contain').innerHTML = listHtml;
+    }
+
+    //初始化渲染
+    render()
+
+    //获取当前条件
+    document.querySelector('.check').addEventListener('click',(e) => {
+      if(e.target.type == 'checkbox'){
+      //得到过滤语句
+      let str = []
+      document.querySelectorAll(':checked').forEach(({id: item})=>{
+        if(item === 'age'){
+          str.push(`item.age > ${allConditions[item]}`);
+        }
+        if(item === 'isShare'){
+          str.push(`item.isShare === ${allConditions[item]}`)
+        }
+        if(item === 'sex'){
+         str.push(`item.sex === '${allConditions[item]}'`);
+        }
+      })
+      // 重新渲染
+      str.length > 0 ? render(allLists.filter((item) => eval(str.join('&&')))) : render(allLists)
+      }
+    },false);
+   
+
+    
+ </script>
+</body>
+</html>
